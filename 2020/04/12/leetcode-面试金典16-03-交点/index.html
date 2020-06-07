@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/tx.jpg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/tx.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/tx.jpg">
+  <link rel="mask-icon" href="/images/tx.jpg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Monda:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.4.2',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":false,"show_result":false,"style":null},
+    back2top: {"enable":true,"sidebar":false,"scrollpercent":false},
+    bookmark: {"enable":false,"color":"#222","save":"auto"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="面试题 16.03. 交点给定两条线段（表示为起点start = {X1, Y1}和终点end = {X2, Y2}），如果它们有交点，请计算其交点，没有交点则返回空值。">
+<meta name="keywords" content="leetcode,算法,面试金典">
+<meta property="og:type" content="article">
+<meta property="og:title" content="leetcode 面试金典16.03 交点">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;04&#x2F;12&#x2F;leetcode-%E9%9D%A2%E8%AF%95%E9%87%91%E5%85%B816-03-%E4%BA%A4%E7%82%B9&#x2F;index.html">
+<meta property="og:site_name" content="learnothingのBlog">
+<meta property="og:description" content="面试题 16.03. 交点给定两条线段（表示为起点start = {X1, Y1}和终点end = {X2, Y2}），如果它们有交点，请计算其交点，没有交点则返回空值。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20200412182035904.png">
+<meta property="og:updated_time" content="2020-06-07T12:49:28.801Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;images&#x2F;image-20200412182035904.png">
+
+<link rel="canonical" href="http://yoursite.com/2020/04/12/leetcode-%E9%9D%A2%E8%AF%95%E9%87%91%E5%85%B816-03-%E4%BA%A4%E7%82%B9/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>leetcode 面试金典16.03 交点 | learnothingのBlog</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">learnothingのBlog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">学无止境，回头是岸</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/04/12/leetcode-%E9%9D%A2%E8%AF%95%E9%87%91%E5%85%B816-03-%E4%BA%A4%E7%82%B9/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/tx.jpg">
+      <meta itemprop="name" content="learnothing">
+      <meta itemprop="description" content="一只不学无术的宝才">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="learnothingのBlog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          leetcode 面试金典16.03 交点
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-04-12 17:48:02" itemprop="dateCreated datePublished" datetime="2020-04-12T17:48:02+08:00">2020-04-12</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-07 20:49:28" itemprop="dateModified" datetime="2020-06-07T20:49:28+08:00">2020-06-07</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E7%A8%8B%E5%BA%8F%E5%91%98%E9%9D%A2%E8%AF%95%E9%87%91%E5%85%B8/" itemprop="url" rel="index">
+                    <span itemprop="name">程序员面试金典</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h2 id="面试题-16-03-交点"><a href="#面试题-16-03-交点" class="headerlink" title="面试题 16.03. 交点"></a><a href="https://leetcode-cn.com/problems/intersection-lcci/" target="_blank" rel="noopener">面试题 16.03. 交点</a></h2><p>给定两条线段（表示为起点start = {X1, Y1}和终点end = {X2, Y2}），如果它们有交点，请计算其交点，没有交点则返回空值。</p><a id="more"></a>
+<p>要求浮点型误差不超过10^-6。若有多个交点（线段重叠）则返回 X 值最小的点，X 坐标相同则返回 Y 值最小的点。</p>
+<p> 示例 1：</p>
+<p>输入：<br>line1 = {0, 0}, {1, 0}<br>line2 = {1, 1}, {0, -1}<br>输出： {0.5, 0}<br>示例 2：</p>
+<p>输入：<br>line1 = {0, 0}, {3, 3}<br>line2 = {1, 1}, {2, 2}<br>输出： {1, 1}<br>示例 3：</p>
+<p>输入：<br>line1 = {0, 0}, {1, 1}<br>line2 = {1, 0}, {2, 1}<br>输出： {}，两条线段没有交点</p>
+<p>来源：力扣（LeetCode）<br>链接：<a href="https://leetcode-cn.com/problems/intersection-lcci" target="_blank" rel="noopener">https://leetcode-cn.com/problems/intersection-lcci</a></p>
+<p>就我所认为花半个小时到一个小时做出这道题对于刷题没有参考意义，为什么这么说。我觉得凡是纯数学解决的算法问题在面试过程中考察意义不是很大，但是可以训练逻辑的缜密性以及提升自信心，当然如果解不出来也不必沮丧，习惯就好。。。</p>
+<p>言归正传，这道题没有什么具体的思维难点，虽然是hard难度。</p>
+<p>两条<strong>直线</strong>在<strong>平面</strong>中无非就三种情况，重合，平行和相交。</p>
+<p>那么两个<strong>线段</strong>又会有什么情况呢？我们根据题目来分为有交点和无交点。</p>
+<ol>
+<li>有交点根据斜率是否相等可分为：<ol>
+<li>共线</li>
+<li>相交</li>
+</ol>
+</li>
+<li>没有交点可以分为：<ol>
+<li>平行</li>
+<li>共线不想交</li>
+<li>不共线且不想交</li>
+</ol>
+</li>
+</ol>
+<p><img src="/images/image-20200412182035904.png" alt="image-20200412182035904"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> &#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">mySwap</span><span class="params">(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; a, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; b)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (b[<span class="number">0</span>] &lt; a[<span class="number">0</span>] || (b[<span class="number">0</span>] == a[<span class="number">0</span>] &amp;&amp; b[<span class="number">1</span>] &lt; a[<span class="number">1</span>])) </span><br><span class="line">            swap(a, b);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; intersection(<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; start1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; end1, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; start2, <span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&amp; end2) &#123;</span><br><span class="line">        mySwap(start1, end1);</span><br><span class="line">        mySwap(start2, end2);</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">int</span> x1 = start1[<span class="number">0</span>], y1 = start1[<span class="number">1</span>], x2 = end1[<span class="number">0</span>], y2 = end1[<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">int</span> x3 = start2[<span class="number">0</span>], y3 = start2[<span class="number">1</span>], x4 = end2[<span class="number">0</span>], y4 = end2[<span class="number">1</span>];</span><br><span class="line">        <span class="keyword">long</span> a1 = y2 - y1, b1 = x1 - x2;</span><br><span class="line">        <span class="keyword">long</span> c1 = a1 * x1 + b1 * y1;</span><br><span class="line">        <span class="keyword">long</span> a2 = y4 - y3, b2 = x3 - x4;</span><br><span class="line">        <span class="keyword">long</span> c2 = a2 * x3 + b2 * y3;</span><br><span class="line">        <span class="built_in">vector</span>&lt;<span class="keyword">double</span>&gt; ans;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> (a1 * b2 == a2 * b1) &#123;</span><br><span class="line">            <span class="built_in">vector</span>&lt;<span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt;&gt; tmp;</span><br><span class="line">            <span class="keyword">if</span> (a1 * x3 + b1 * y3 == c1) &#123;</span><br><span class="line">                <span class="keyword">if</span> (x1 == x2) &#123;</span><br><span class="line">                    <span class="keyword">if</span> (y3 &gt;= y1 &amp;&amp; y3 &lt;= y2)</span><br><span class="line">                        ans = &#123;(<span class="keyword">double</span>)x3, (<span class="keyword">double</span>)y3&#125;;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (y1 &gt;= y3 &amp;&amp; y1 &lt;= y4)</span><br><span class="line">                        ans = &#123;(<span class="keyword">double</span>)x1, (<span class="keyword">double</span>)y1&#125;;</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">if</span> (x3 &gt;= x1 &amp;&amp; x3 &lt;= x2)</span><br><span class="line">                        ans = &#123;(<span class="keyword">double</span>)x3, (<span class="keyword">double</span>)y3&#125;;</span><br><span class="line">                    <span class="keyword">else</span> <span class="keyword">if</span> (x1 &gt;= x3 &amp;&amp; x1 &lt;= x4)</span><br><span class="line">                        ans = &#123;(<span class="keyword">double</span>)x1, (<span class="keyword">double</span>)y1&#125;;</span><br><span class="line">                &#125;   </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">double</span> tx = ((<span class="keyword">double</span>)b2*c1 - b1*c2) / (a1*b2 - a2*b1);</span><br><span class="line">            <span class="keyword">double</span> ty = ((<span class="keyword">double</span>)a2*c1 - a1*c2) / (a2*b1 - a1*b2);</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (tx &gt;= max(x1, x3) &amp;&amp; tx &lt;= min(x2, x4) &amp;&amp; (ty &gt;= min(y1, y2) &amp;&amp; ty &lt;= max(y1, y2) &amp;&amp; ty &gt;= min(y3, y4) &amp;&amp; ty &lt;= max(y3, y4)))</span><br><span class="line">                ans = &#123;tx, ty&#125;;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>话不多说，直接看代码。</p>
+<p>首先五门需要注意到题目说的“若有多个交点（线段重叠）则返回 X 值最小的点，X 坐标相同则返回 Y 值最小的点”，这其实在针对共线相交的情况，在这里特别要注意共线相交且横坐标相等的情况（就是两个线段共线相交且都垂直于x轴）。</p>
+<p>第一步，为了后面判断的简化处理，可以将两线段的端点按照横坐标优先的原则从小到大排序，这里简单自定义了一个mySwap函数做这个事情。</p>
+<p>然后为了使用方便把两个线段的端点取出来命名为$d_1(x_1, y_1), d_2(x_2, y_2)$以及$d_3(x_3, y_3), d_4(x_4, y_4)$，接着使用大家假装熟悉的两点式解直线方程的方式，求得两线段所在直线的方程参数$a_1x+b_1y=c_1$和$a_2x+b_2y=c_2$</p>
+<p>求完基本参数之后就可以进行分类讨论：</p>
+<ol>
+<li>两线段斜率相等</li>
+<li>两线段斜率不等</li>
+</ol>
+<p>我们先看最后的<code>else</code>即斜率不等的部分，这里只需要使用大家的高中知识解得两线段所在直线的交点，之后判断该交点是否在两个线段上，判断的方法也很简单，就是需要判断求得的$tx$是否在$x_1,x_2$以及$x_3,x_4$之间以及$ty$是否在$y_1,y_2$以及$y_3,y_4$之间；</p>
+<p>接下来看分类较为复杂的平行状态：</p>
+<p>首先需要根据 式(1) 先一步确定两个线段斜率相同，这里表述不是很严谨，因为与x轴垂直的时候是不存在斜率的这也是为什么用 式(1) 而不用斜率表达式的原因。这里斜率相同说明共线或者平行，下面对条件作进一步约束。</p>
+<p>这里需要通过 式(2) 判断出第二条线段的某一个端点是否在第一个线段所在的直线上，从而确认共线，这样平行的情况就被排出在外了，因为平行无论如何都没有交点。</p>
+<script type="math/tex; mode=display">
+a_1*b_2==a_2*b_1                                                         (1)</script><script type="math/tex; mode=display">
+a_1*x_3+b_1*y_3==c_1                                                      (2)</script><p>最后根据共线的线段是否与x轴垂直分为两种情况：</p>
+<ol>
+<li>垂直（$x_1==x_2$）</li>
+<li>不垂直</li>
+</ol>
+<p>对于垂直的情况，之前使用的mySwap函数使得$y_1&lt;y_2$并且$y_3&lt;y_4$（由于题目说线段始终有效说明垂直情况下每个线段的两个端点纵坐标不可能相等，否则线段就变成了点），这样我们就只需要做两个判断，就是$d_1$是否在第二个线段上以及$d_3$是否在第一个线段上。</p>
+<p>同理对于不垂直与x轴的情况，也可以根据横坐标$x_1&lt;x_2$以及$x_3&lt;x_4$的情况下，通过横坐标判断$d_3$是否在线段1上以及$d_1$是否在线段2上。</p>
+<p>综上，码出你的自信。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/leetcode/" rel="tag"># leetcode</a>
+              <a href="/tags/%E7%AE%97%E6%B3%95/" rel="tag"># 算法</a>
+              <a href="/tags/%E9%9D%A2%E8%AF%95%E9%87%91%E5%85%B8/" rel="tag"># 面试金典</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2020/04/12/leetcode-184%E5%9C%BA%E5%91%A8%E8%B5%9B/" rel="next" title="leetcode 184场周赛">
+                  <i class="fa fa-chevron-left"></i> leetcode 184场周赛
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2020/04/13/525-%E7%9B%B8%E5%90%8C%E6%95%B0%E9%87%8F%E7%9A%8401%E8%BF%9E%E7%BB%AD%E5%AD%90%E6%95%B0%E7%BB%84/" rel="prev" title="525. 相同数量的01连续子数组">
+                  525. 相同数量的01连续子数组 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#面试题-16-03-交点"><span class="nav-number">1.</span> <span class="nav-text">面试题 16.03. 交点</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="learnothing"
+    src="/images/tx.jpg">
+  <p class="site-author-name" itemprop="name">learnothing</p>
+  <div class="site-description" itemprop="description">一只不学无术的宝才</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">learnothing</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+      
+<script type="text/x-mathjax-config">
+
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ['\\(', '\\)'] ],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    TeX: {
+      equationNumbers: {
+        autoNumber: 'AMS'
+      }
+    }
+  });
+
+  MathJax.Hub.Register.StartupHook('TeX Jax Ready', function() {
+    MathJax.InputJax.TeX.prefilterHooks.Add(function(data) {
+      if (data.display) {
+        var next = data.script.nextSibling;
+        while (next && next.nodeName.toLowerCase() === '#text') {
+          next = next.nextSibling;
+        }
+        if (next && next.nodeName.toLowerCase() === 'br') {
+          next.parentNode.removeChild(next);
+        }
+      }
+    });
+  });
+
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for (i = 0; i < all.length; i += 1) {
+      element = document.getElementById(all[i].inputID + '-Frame').parentNode;
+      if (element.nodeName.toLowerCase() == 'li') {
+        element = element.parentNode;
+      }
+      element.classList.add('has-jax');
+    }
+  });
+</script>
+<script>
+  NexT.utils.getScript('//cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML', () => {
+    MathJax.Hub.Typeset();
+  }, window.MathJax);
+</script>
+
+    
+
+  
+
+  
+
+   <!-- 代码块复制功能 -->
+  <script type="text/javascript" src="/js/src/clipboard.min.js"></script>  
+  <script type="text/javascript" src="/js/src/clipboard-use.js"></script>
+ </body>
+</html>
